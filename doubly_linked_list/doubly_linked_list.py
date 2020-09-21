@@ -109,7 +109,7 @@ class DoublyLinkedList:
     List and inserts it as the new head node of the List.
     """
     def move_to_front(self, node):
-         if node == self.head:
+        if node == self.head:
             return self
         elif node == self.tail:
             node.prev.next = None
