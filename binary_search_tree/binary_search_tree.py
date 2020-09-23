@@ -9,6 +9,11 @@ This part of the project comprises two days:
 2. Implement the `in_order_print`, `bft_print`, and `dft_print` methods
    on the BSTNode class.
 """
+
+from stack import Stack
+from queue import Queue
+
+
 class BSTNode:
     def __init__(self, value):
         self.value = value
@@ -17,37 +22,92 @@ class BSTNode:
 
     # Insert the given value into the tree
     def insert(self, value):
-        pass
+        if value <= self.value:
+            if self.left is None:
+                self.left = BSTNode(value)
+            else:
+                self.left.insert(value)
+        else:
+            if self.right is None:
+                self.right = BSTNode(value)
+            else:
+                self.right.insert(value)
 
     # Return True if the tree contains the value
     # False if it does not
     def contains(self, target):
+        if self.value == target:
+            return True
+        elif target < self.value:
+            if self.left is None:
+                return False
+            else:
+                return self.left.contains(target)
+        else:
+            if self.right is None:
+                return False
+            else:
+                return self.right.contains(target)
+                
         pass
 
     # Return the maximum value found in the tree
     def get_max(self):
-        pass
+        if self.right is None:
+            return self.value
+        else:
+            return self.right.get_max()
 
     # Call the function `fn` on the value of each node
     def for_each(self, fn):
-        pass
+        fn(self.value)
+        if self.left:
+            self.left.for_each(fn)
+        if self.right:
+            self.right.for_each(fn)
 
     # Part 2 -----------------------
 
     # Print all the values in order from low to high
     # Hint:  Use a recursive, depth first traversal
     def in_order_print(self):
-        pass
+        if self.left:
+            self.left.in_order_print()
+        print(self.value)
+        if self.right:
+            self.right.in_order_print()
+        
 
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal
     def bft_print(self):
-        pass
+        #use a queue
+        q = Queue()
+        #print current node, add left child to queue, add right child toqueue
+        q.enqueue(self)
+        while len(q) > 0:
+            current = q.dequeue()
+            print(current.value)
+            if current.right:
+                q.enqueue(current.right)
+            if current.left:
+                q.enqueue(current.left)
 
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
     def dft_print(self):
-        pass
+        #create a stack
+        stack = Stack()
+        #push initial values onto stack
+        stack.push(self)
+        while len(stack) > 0:
+            current = stack.pop()
+            print(current.value)
+        #push right > parent > left onto stack (FILO)
+            if current.right:
+                stack.push(current.right)
+            if current.left:
+                stack.push(current.left)
 
     # Stretch Goals -------------------------
     # Note: Research may be required
@@ -80,6 +140,6 @@ print("elegant methods")
 print("pre order")
 bst.pre_order_dft()
 print("in order")
-bst.in_order_dft()
+bst.in_order_print()
 print("post order")
 bst.post_order_dft()  
